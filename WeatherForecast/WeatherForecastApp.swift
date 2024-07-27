@@ -9,9 +9,15 @@ import SwiftUI
 
 @main
 struct WeatherForecastApp: App {
+    private var networkManager: NetworkManager
+
+    init() {
+        networkManager = NetworkManager(baseURL: Constants.baseURL)
+    }
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            WeatherDashboardView(viewModel: WeatherDashboardViewModel(historyIntegrationService: HistoryIntegrationService(networkManager: networkManager)))
         }
     }
 }
