@@ -11,15 +11,17 @@ import Foundation
 class MockHistoryIntegrationService: HistoryIntegrationHandler {
     var isGetWeatherHistorySuccess: Bool = false
     var isGetWeatherHistoryNetworkFailure: Bool = false
-
-    func getWeatherHistory(searchedString: String, _ completion: @escaping (Result<LocationForecast, NetworkServiceError>) -> Void) {
-        if isGetWeatherHistorySuccess, let response = MockHistoryResponseProvider.getHistoryResponse() {
-            completion(.success(response))
-        } else {
-            if isGetWeatherHistoryNetworkFailure {
-                completion(.failure(.noInternet))
+    
+    func getWeatherHistory(searchedString: String) async throws -> WeatherForecast.LocationForecast {
+        return try await withCheckedThrowingContinuation { continuation in
+            if isGetWeatherHistorySuccess, let response = MockHistoryResponseProvider.getHistoryResponse() {
+                continuation.resume(returning: response)
             } else {
-                completion(.failure(.invalidResponse))
+                if isGetWeatherHistoryNetworkFailure {
+                    continuation.resume(throwing: NetworkServiceError.noInternet)
+                } else {
+                    continuation.resume(throwing: NetworkServiceError.invalidResponse)
+                }
             }
         }
     }

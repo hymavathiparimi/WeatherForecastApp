@@ -8,5 +8,5 @@
 import Foundation
 
 protocol HistoryIntegrationHandler {
-    func getWeatherHistory(searchedString: String, _ completion: @escaping (Result<LocationForecast, NetworkServiceError>) -> Void)
+    func getWeatherHistory(searchedString: String) async throws -> LocationForecast
 }

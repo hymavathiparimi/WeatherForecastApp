@@ -16,7 +16,7 @@ final class HistoryIntegrationService {
 }
 
 extension HistoryIntegrationService: HistoryIntegrationHandler {
-    func getWeatherHistory(searchedString: String, _ completion: @escaping (Result<LocationForecast, NetworkServiceError>) -> Void) {
+    func getWeatherHistory(searchedString: String) async throws -> LocationForecast {
         let today = Date()
         let requestParams = [
             "key": Config.apiKey,
@@ -24,6 +24,15 @@ extension HistoryIntegrationService: HistoryIntegrationHandler {
             "end_dt": today.nextDate?.toString() ?? "",
             "q": searchedString
         ]
-        networkManager.callAPI(.get, endPoint: "v1/history.json", parameters: requestParams, completionHandler: completion)
+        return try await withCheckedThrowingContinuation { continuation in
+            networkManager.callAPI(.get, endPoint: "v1/history.json", parameters: requestParams) { (result: Result<LocationForecast, NetworkServiceError>) in
+                switch result {
+                case .success(let forecast):
+                    continuation.resume(returning: forecast)
+                case .failure(let error):
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
     }
 }

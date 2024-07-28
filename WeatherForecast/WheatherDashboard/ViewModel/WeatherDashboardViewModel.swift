@@ -25,21 +25,27 @@ final class WeatherDashboardViewModel: ObservableObject {
             return
         }
         isLoading = true
-        historyIntegrationService.getWeatherHistory(searchedString: searchedString) { [weak self] result in
-            guard let self else {
-                return
-            }
-            isLoading = false
-            switch result {
-            case .success(let response):
-                self.locationForecast = response
-                updateLocationHistory(searchedString: searchedString, locationForecast: response)
-            case .failure(let failure):
-                if NetworkServiceError.noInternet == failure {
-                    self.locationForecast = AppUserDefaults.locationHistory?[searchedString]
+        defer { isLoading = false }
+        Task {
+            do {
+                let response = try await historyIntegrationService.getWeatherHistory(searchedString: searchedString)
+                Task { @MainActor in
+                    self.locationForecast = response
+                    self.updateLocationHistory(searchedString: searchedString, locationForecast: response)
                 }
-                errorMessage = ToastMessageModel(title: failure.errorDescription)
-                showBanner = locationForecast == nil
+            } catch let failure as NetworkServiceError {
+                Task { @MainActor in
+                    if NetworkServiceError.noInternet == failure {
+                        self.locationForecast = AppUserDefaults.locationHistory?[searchedString]
+                    }
+                    self.errorMessage = ToastMessageModel(title: failure.errorDescription)
+                    self.showBanner = self.locationForecast == nil
+                }
+            } catch {
+                Task { @MainActor in
+                    self.errorMessage = ToastMessageModel(title: error.localizedDescription)
+                    self.showBanner = self.locationForecast == nil
+                }
             }
         }
     }
