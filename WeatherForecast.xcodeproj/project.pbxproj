@@ -185,15 +185,14 @@
 			isa = PBXGroup;
 			children = (
 				6286BF2E2C55287800F19BB8 /* Info.plist */,
+				6286BF452C578DA700F19BB8 /* WeatherFeature */,
 				6286BF1F2C551FD600F19BB8 /* Manager */,
-				6286BF082C551DD900F19BB8 /* WheatherDashboard */,
 				6286BF012C551C8500F19BB8 /* SharedViews */,
 				6286BEF32C55196D00F19BB8 /* Networking */,
 				6286BEF02C55187300F19BB8 /* Resources */,
 				6286BED92C55128500F19BB8 /* Utilities */,
 				6286BED22C5511F100F19BB8 /* Models */,
 				6286BEA32C550EF500F19BB8 /* WeatherForecastApp.swift */,
-				6286BECD2C55113100F19BB8 /* SearchLocation */,
 				6286BEA92C550EF700F19BB8 /* Preview Content */,
 			);
 			path = WeatherForecast;
@@ -345,7 +344,7 @@
 			path = SharedViews;
 			sourceTree = "<group>";
 		};
-		6286BF082C551DD900F19BB8 /* WheatherDashboard */ = {
+		6286BF082C551DD900F19BB8 /* WeatherDashboard */ = {
 			isa = PBXGroup;
 			children = (
 				6286BF102C551EAF00F19BB8 /* HistoryNetworkIntegration */,
@@ -354,7 +353,7 @@
 				6286BF242C55203B00F19BB8 /* WeatherView.swift */,
 				6286BF0B2C551E2B00F19BB8 /* WeatherDashboardView.swift */,
 			);
-			path = WheatherDashboard;
+			path = WeatherDashboard;
 			sourceTree = "<group>";
 		};
 		6286BF0D2C551E4800F19BB8 /* ViewModel */ = {
@@ -434,6 +433,15 @@
 				6286BF432C552FF900F19BB8 /* WeatherDashboardViewModelTests.swift */,
 			);
 			path = WeatherDashboardViewModelTests;
+			sourceTree = "<group>";
+		};
+		6286BF452C578DA700F19BB8 /* WeatherFeature */ = {
+			isa = PBXGroup;
+			children = (
+				6286BF082C551DD900F19BB8 /* WeatherDashboard */,
+				6286BECD2C55113100F19BB8 /* SearchLocation */,
+			);
+			path = WeatherFeature;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
